@@ -1,0 +1,26 @@
+# Blueprint Render — à placer à la RACINE du dépôt GitHub du backend.
+# (Render > New > Blueprint, ou saisir les mêmes valeurs à la main dans un "Web Service")
+services:
+  - type: web
+    name: iua-backend
+    runtime: node
+    plan: free
+    region: frankfurt            # le plus proche d'Abidjan parmi les régions Render
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run start:render
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22
+      - key: DATABASE_URL
+        sync: false              # à saisir dans le tableau de bord
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_SECRET_ETUDIANT
+        generateValue: true
+      - key: JWT_ADMIN_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false              # URLs Vercel, séparées par des virgules
